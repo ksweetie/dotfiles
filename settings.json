@@ -1,0 +1,109 @@
+{
+    "breadcrumbs.enabled": true,
+    "workbench.editor.enablePreview": false,
+    "window.zoomLevel": 1,
+    "editor.tabSize": 2,
+    "editor.minimap.enabled": false,
+    "editor.cursorBlinking": "phase",
+    "editor.parameterHints.enabled": false,
+    "explorer.confirmDragAndDrop": false,
+    "explorer.confirmDelete": false,
+    "explorer.autoReveal": false,
+    "files.insertFinalNewline": true,
+    "files.trimTrailingWhitespace": true,
+    "editor.formatOnPaste": true,
+    "editor.detectIndentation": false,
+    "workbench.colorTheme": "Quiet Light",
+    "editor.fontFamily": "FiraCode-Retina, Menlo, Monaco, 'Courier New', monospace",
+    "editor.fontLigatures": true,
+    "editor.rulers": [120],
+    "javascript.validate.enable": false,
+    "standard.autoFixOnSave": true,
+    "eslint.autoFixOnSave": true,
+    "eslint.validate": [
+      {
+        "language": "typescript",
+        "autoFix": true
+      },
+      {
+        "language": "typescriptreact",
+        "autoFix": true
+      }
+    ],
+    "workbench.colorCustomizations": {
+      "editorCursor.foreground": "#2cc16f"
+    },
+    "window.title": "${activeEditorMedium}${separator}${rootName}",
+    "vim.visualModeKeyBindingsNonRecursive": [
+      {
+          "before": [
+              ">"
+          ],
+          "commands": [
+              "editor.action.indentLines"
+          ]
+      },
+      {
+          "before": [
+              "<"
+          ],
+          "commands": [
+              "editor.action.outdentLines"
+          ]
+      },
+  ],
+  "vim.insertModeKeyBindings": [
+    {
+        "before": ["j", "j"],
+        "after": ["<Esc>"]
+    }
+  ],
+  "vim.useSystemClipboard": true,
+  "vim.leader": ",",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "html-css-class-completion.includeGlobPattern": "app/**/*.{css,scss,sass,html}",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "tsimporter.emitSemicolon": false,
+  "bracket-pair-colorizer-2.colors": [
+    "#4ec1e5",
+    "#705697",
+    "#749351",
+    "#f1897f",
+  ],
+  "macros": {
+    "runSpec": [
+      "workbench.action.terminal.focus",
+      { "command": "workbench.action.terminal.sendSequence", "args": { "text": "spec ${file}:${lineNumber}\u000D" } }
+    ]
+  },
+  "gitlens.menus": {
+    "editor": {
+      "blame": false,
+      "clipboard": true,
+      "compare": true,
+      "details": false,
+      "history": false,
+      "remote": false
+    },
+    "editorGroup": false,
+    "explorer": {
+      "clipboard": true,
+      "compare": true,
+      "history": true,
+      "remote": true
+    },
+    "scmGroup": {
+      "compare": true,
+      "openClose": true,
+      "stash": true,
+      "stashInline": true
+    },
+    "scmItem": {
+      "clipboard": true,
+      "compare": true,
+      "history": true,
+      "remote": true,
+      "stash": true
+    }
+  }
+}
