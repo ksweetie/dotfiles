@@ -17,6 +17,7 @@
     "editor.fontFamily": "FiraCode-Retina, Menlo, Monaco, 'Courier New', monospace",
     "editor.fontLigatures": true,
     "editor.rulers": [120],
+    "editor.gotoLocation.multipleDefinitions": "goto",
     "javascript.validate.enable": false,
     "standard.autoFixOnSave": true,
     "eslint.autoFixOnSave": true,
