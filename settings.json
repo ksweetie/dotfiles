@@ -1,62 +1,65 @@
 {
-    "breadcrumbs.enabled": true,
-    "workbench.editor.enablePreview": false,
-    "window.zoomLevel": 1,
-    "editor.tabSize": 2,
-    "editor.minimap.enabled": false,
-    "editor.cursorBlinking": "phase",
-    "editor.parameterHints.enabled": false,
-    "explorer.confirmDragAndDrop": false,
-    "explorer.confirmDelete": false,
-    "explorer.autoReveal": false,
-    "files.insertFinalNewline": true,
-    "files.trimTrailingWhitespace": true,
-    "editor.formatOnPaste": true,
-    "editor.detectIndentation": false,
-    "workbench.colorTheme": "Quiet Light",
-    "editor.fontFamily": "FiraCode-Retina, Menlo, Monaco, 'Courier New', monospace",
-    "editor.fontLigatures": true,
-    "editor.rulers": [120],
-    "editor.gotoLocation.multipleDefinitions": "goto",
-    "javascript.validate.enable": false,
-    "standard.autoFixOnSave": true,
-    "eslint.autoFixOnSave": true,
-    "eslint.validate": [
-      {
-        "language": "typescript",
-        "autoFix": true
-      },
-      {
-        "language": "typescriptreact",
-        "autoFix": true
-      }
-    ],
-    "workbench.colorCustomizations": {
-      "editorCursor.foreground": "#2cc16f"
+  "breadcrumbs.enabled": true,
+  "workbench.editor.enablePreview": false,
+  "window.zoomLevel": 1,
+  "editor.tabSize": 2,
+  "editor.minimap.enabled": false,
+  "editor.cursorBlinking": "phase",
+  "editor.parameterHints.enabled": false,
+  "explorer.confirmDragAndDrop": false,
+  "explorer.confirmDelete": false,
+  "explorer.autoReveal": false,
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "editor.formatOnPaste": true,
+  "editor.detectIndentation": false,
+  "workbench.colorTheme": "GitHub Plus",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.editor.highlightModifiedTabs": true,
+  "editor.fontFamily": "FiraCode-Retina, Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontLigatures": true,
+  "editor.rulers": [120],
+  "editor.gotoLocation.multipleDefinitions": "goto",
+  "editor.lineNumbers": "relative",
+  "javascript.validate.enable": false,
+  "standard.autoFixOnSave": true,
+  "eslint.autoFixOnSave": true,
+  "eslint.validate": [
+    {
+      "language": "typescript",
+      "autoFix": true
     },
-    "window.title": "${activeEditorMedium}${separator}${rootName}",
-    "vim.visualModeKeyBindingsNonRecursive": [
-      {
-          "before": [
-              ">"
-          ],
-          "commands": [
-              "editor.action.indentLines"
-          ]
-      },
-      {
-          "before": [
-              "<"
-          ],
-          "commands": [
-              "editor.action.outdentLines"
-          ]
-      },
+    {
+      "language": "typescriptreact",
+      "autoFix": true
+    }
+  ],
+  "workbench.colorCustomizations": {
+    "editorCursor.foreground": "#2cc16f"
+  },
+  "window.title": "${activeEditorMedium}${separator}${rootName}",
+  "vim.visualModeKeyBindingsNonRecursive": [
+    {
+      "before": [
+        ">"
+      ],
+      "commands": [
+        "editor.action.indentLines"
+      ]
+    },
+    {
+      "before": [
+        "<"
+      ],
+      "commands": [
+        "editor.action.outdentLines"
+      ]
+    },
   ],
   "vim.insertModeKeyBindings": [
     {
-        "before": ["j", "j"],
-        "after": ["<Esc>"]
+      "before": ["j", "j"],
+      "after": ["<Esc>"]
     }
   ],
   "vim.useSystemClipboard": true,
@@ -65,6 +68,7 @@
   "html-css-class-completion.includeGlobPattern": "app/**/*.{css,scss,sass,html}",
   "javascript.updateImportsOnFileMove.enabled": "always",
   "tsimporter.emitSemicolon": false,
+  "tsimporter.preferRelative": false,
   "bracket-pair-colorizer-2.colors": [
     "#4ec1e5",
     "#705697",
@@ -106,5 +110,5 @@
       "remote": true,
       "stash": true
     }
-  }
+  },
 }

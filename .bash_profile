@@ -12,9 +12,14 @@ alias be="bundle exec "
 alias lint="be scss-lint; be slim-lint app/views; be rubocop"
 alias respring="bin/spring stop && bin/spring start"
 alias spec="bundle exec bin/rspec "
-alias rails="bin/rails"
+#alias rails="bin/rails"
 alias spring="bin/spring"
 alias rake="bin/rake"
+
+# wunder aliases
+alias prodconsole="heroku run rails c -a wunder-portal-production"
+alias prodreadconsole="heroku run rails c -a wunder-portal-production-read"
+alias stagingconsole="heroku run rails c -a wunder-portal-staging"
 
 # git aliases
 alias gs="git status"
@@ -22,6 +27,7 @@ alias gp="git pull"
 alias ga="git add -A; git status"
 alias gb="git branch"
 alias grh="git reset HEAD^"
+alias gclear="git checkout ."
 alias greb="git rebase -i HEAD~2"
 alias glp="git log --pretty=oneline"
 alias gl="git log --graph --pretty=format:'%Cred%h%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
