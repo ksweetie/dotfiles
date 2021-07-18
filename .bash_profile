@@ -3,23 +3,37 @@ export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
 export EDITOR="vim"
 export NVM_DIR=~/.nvm
+export BASH_SILENCE_DEPRECATION_WARNING=1
 eval "$(rbenv init -)"
 
-#rails aliases
+# yarn
+alias yt="yarn test"
+alias ytw="yarn test-watch"
+alias ytwrib="yarn test-watch --runInBand"
+
+# rails aliases
 alias fs="bundle exec foreman start -f Procfile.ksweetie.dev"
-alias wds="./bin/webpack-dev-server"
+alias wds="env ./bin/webpack-dev-server --profile --progress"
+alias wds2="bundle exec foreman start -f Procfile.dev"
 alias be="bundle exec "
-alias lint="be scss-lint; be slim-lint app/views; be rubocop"
 alias respring="bin/spring stop && bin/spring start"
+alias mig="bundle exec rails db:migrate RAILS_ENV=development; bundle exec rails db:migrate RAILS_ENV=test"
 alias spec="bundle exec bin/rspec "
-#alias rails="bin/rails"
 alias spring="bin/spring"
 alias rake="bin/rake"
+alias taild="tail -f log/development.log"
 
 # wunder aliases
-alias prodconsole="heroku run rails c -a wunder-portal-production"
-alias prodreadconsole="heroku run rails c -a wunder-portal-production-read"
+alias prodw="heroku run rails c -a wunder-portal-production -- -- --nomultiline"
+alias prodr="heroku run rails c -a wunder-portal-production-read -- -- --nomultiline"
 alias stagingconsole="heroku run rails c -a wunder-portal-staging"
+alias lint="~/scripts/rbdiff;~/scripts/sldiff;~/scripts/scssdiff;"
+alias scrub="rake db:scrub:load_prod_data"
+
+# misc
+ntimes() { for i in `seq "$1"` ; do $2 ; [[ ! $? = 0 ]] && break ; done }
+alias checkports="lsof -wni tcp:3000"
+alias dirsize="find . -maxdepth 1 -mindepth 1 -type d -exec du -hs {} \; | sort -hr"
 
 # git aliases
 alias gs="git status"
@@ -30,7 +44,7 @@ alias grh="git reset HEAD^"
 alias gclear="git checkout ."
 alias greb="git rebase -i HEAD~2"
 alias glp="git log --pretty=oneline"
-alias gl="git log --graph --pretty=format:'%Cred%h%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias gl="git log --graph --pretty=format:'%Cred%h%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias gdall="git branch -vv | grep 'origin/.*: gone]' | awk '{print $1}' | xargs git branch -d"
 alias gcempty="git commit --allow-empty -m 'Empty commit'"
 gco() {

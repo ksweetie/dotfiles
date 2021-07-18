@@ -13,27 +13,26 @@
   "files.trimTrailingWhitespace": true,
   "editor.formatOnPaste": true,
   "editor.detectIndentation": false,
-  "workbench.colorTheme": "GitHub Plus",
+  "workbench.colorTheme": "Visual Studio Light",
   "workbench.iconTheme": "material-icon-theme",
   "workbench.editor.highlightModifiedTabs": true,
   "editor.fontFamily": "FiraCode-Retina, Menlo, Monaco, 'Courier New', monospace",
   "editor.fontLigatures": true,
-  "editor.rulers": [120],
+  "editor.rulers": [
+    120
+  ],
   "editor.gotoLocation.multipleDefinitions": "goto",
   "editor.lineNumbers": "relative",
   "javascript.validate.enable": false,
   "standard.autoFixOnSave": true,
-  "eslint.autoFixOnSave": true,
-  "eslint.validate": [
-    {
-      "language": "typescript",
-      "autoFix": true
-    },
-    {
-      "language": "typescriptreact",
-      "autoFix": true
-    }
+  "standard.validate": [
+    "javascript",
+    "javascriptreact"
   ],
+  "eslint.probe": ["typescript", "typescriptreact"],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
   "workbench.colorCustomizations": {
     "editorCursor.foreground": "#2cc16f"
   },
@@ -58,8 +57,37 @@
   ],
   "vim.insertModeKeyBindings": [
     {
-      "before": ["j", "j"],
-      "after": ["<Esc>"]
+      "before": [
+        "j",
+        "j"
+      ],
+      "after": [
+        "<Esc>"
+      ]
+    }
+  ],
+  "vim.normalModeKeyBindingsNonRecursive": [
+    {
+      "before": [
+        "u"
+      ],
+      "after": [],
+      "commands": [
+        {
+          "command": "undo"
+        }
+      ]
+    },
+    {
+      "before": [
+        "<C-r>"
+      ],
+      "after": [],
+      "commands": [
+        {
+          "command": "redo"
+        }
+      ]
     }
   ],
   "vim.useSystemClipboard": true,
@@ -69,16 +97,15 @@
   "javascript.updateImportsOnFileMove.enabled": "always",
   "tsimporter.emitSemicolon": false,
   "tsimporter.preferRelative": false,
-  "bracket-pair-colorizer-2.colors": [
-    "#4ec1e5",
-    "#705697",
-    "#749351",
-    "#f1897f",
-  ],
   "macros": {
     "runSpec": [
       "workbench.action.terminal.focus",
-      { "command": "workbench.action.terminal.sendSequence", "args": { "text": "spec ${file}:${lineNumber}\u000D" } }
+      {
+        "command": "workbench.action.terminal.sendSequence",
+        "args": {
+          "text": "spec ${file}:${lineNumber}\u000D"
+        }
+      }
     ]
   },
   "gitlens.menus": {
@@ -111,4 +138,27 @@
       "stash": true
     }
   },
+  "terminal.integrated.scrollback": 10000,
+  "terminal.external.osxExec": "iTerm2.app",
+  "gitlens.codeLens.enabled": false,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "ruby.useBundler": true,
+  "ruby.useLanguageServer": true,
+  "ruby.lint": {
+    "rubocop": {
+      "useBundler": true
+    },
+},
+"editor.cursorStyle": "line",
+"editor.wordSeparators": "/\\()\"':,.;<>~!@#$%^&*|+=[]{}`?-",
+"editor.wordWrap": "off",
+"editor.folding": false,
+"editor.glyphMargin": false,
+"terminal.integrated.allowChords": false,
+"editor.inlineSuggest.enabled": true,
+  // This auto-fixes Ruby files, but is super slow
+  // "editor.formatOnSave": true,
+  // "[ruby]": {
+  //   "editor.defaultFormatter": "misogi.ruby-rubocop"
+  // }
 }
