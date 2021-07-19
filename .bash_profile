@@ -1,6 +1,7 @@
 # ~/.bash_profile
 export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
 export EDITOR="vim"
 export NVM_DIR=~/.nvm
 export BASH_SILENCE_DEPRECATION_WARNING=1

@@ -156,6 +156,9 @@
 "editor.glyphMargin": false,
 "terminal.integrated.allowChords": false,
 "editor.inlineSuggest.enabled": true,
+"rust-client.channel": "stable", // Channel
+"rust-client.rlsPath": "/opt/homebrew/opt/rust-analyzer/bin/rust-analyzer", // Language server
+"rust-client.disableRustup": true,
   // This auto-fixes Ruby files, but is super slow
   // "editor.formatOnSave": true,
   // "[ruby]": {
