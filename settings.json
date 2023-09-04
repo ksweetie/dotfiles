@@ -1,7 +1,6 @@
 {
   "breadcrumbs.enabled": true,
   "workbench.editor.enablePreview": false,
-  "window.zoomLevel": 1,
   "editor.tabSize": 2,
   "editor.minimap.enabled": false,
   "editor.cursorBlinking": "phase",
@@ -14,7 +13,6 @@
   "editor.formatOnPaste": true,
   "editor.detectIndentation": false,
   "workbench.colorTheme": "Visual Studio Light",
-  "workbench.iconTheme": "material-icon-theme",
   "workbench.editor.highlightModifiedTabs": true,
   "editor.fontFamily": "FiraCode-Retina, Menlo, Monaco, 'Courier New', monospace",
   "editor.fontLigatures": true,
@@ -24,14 +22,23 @@
   "editor.gotoLocation.multipleDefinitions": "goto",
   "editor.lineNumbers": "relative",
   "javascript.validate.enable": false,
-  "standard.autoFixOnSave": true,
-  "standard.validate": [
-    "javascript",
-    "javascriptreact"
+  "eslint.probe": [
+    "typescript",
+    "typescriptreact"
   ],
-  "eslint.probe": ["typescript", "typescriptreact"],
+  "eslint.validate": [
+    "typescript",
+    "typescriptreact"
+  ],
+  "javascript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
+  "typescript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
+  },
+  "[js]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": false
+    },
   },
   "workbench.colorCustomizations": {
     "editorCursor.foreground": "#2cc16f"
@@ -55,17 +62,6 @@
       ]
     },
   ],
-  "vim.insertModeKeyBindings": [
-    {
-      "before": [
-        "j",
-        "j"
-      ],
-      "after": [
-        "<Esc>"
-      ]
-    }
-  ],
   "vim.normalModeKeyBindingsNonRecursive": [
     {
       "before": [
@@ -88,26 +84,44 @@
           "command": "redo"
         }
       ]
-    }
+    },
+    // Not working: https://github.com/VSCodeVim/Vim/issues/5122
+    {
+      "before": [
+        "shift+enter"
+      ],
+      "after": [
+        "k",
+        "^"
+      ],
+    },
+    {
+      "before": [
+        "Y"
+      ],
+      "after": [
+        "y",
+        "$"
+      ]
+    },
   ],
   "vim.useSystemClipboard": true,
   "vim.leader": ",",
   "typescript.updateImportsOnFileMove.enabled": "always",
-  "html-css-class-completion.includeGlobPattern": "app/**/*.{css,scss,sass,html}",
   "javascript.updateImportsOnFileMove.enabled": "always",
   "tsimporter.emitSemicolon": false,
   "tsimporter.preferRelative": false,
-  "macros": {
-    "runSpec": [
-      "workbench.action.terminal.focus",
-      {
-        "command": "workbench.action.terminal.sendSequence",
-        "args": {
-          "text": "spec ${file}:${lineNumber}\u000D"
-        }
-      }
-    ]
-  },
+  // "macros": {
+  //   "runSpec": [
+  //     "workbench.action.terminal.focus",
+  //     {
+  //       "command": "workbench.action.terminal.sendSequence",
+  //       "args": {
+  //         "text": "spec ${file}:${lineNumber}\u000D"
+  //       }
+  //     }
+  //   ]
+  // },
   "gitlens.menus": {
     "editor": {
       "blame": false,
@@ -140,28 +154,61 @@
   },
   "terminal.integrated.scrollback": 10000,
   "terminal.external.osxExec": "iTerm2.app",
-  "gitlens.codeLens.enabled": false,
   "diffEditor.ignoreTrimWhitespace": false,
+  "editor.cursorStyle": "line",
+  "editor.wordSeparators": "/\\()\"':,.;<>~!@#$%^&*|+=[]{}`?-",
+  "editor.wordWrap": "off",
+  // Shrinks line numbers, but you can't have any other icons there
+  // "editor.glyphMargin": false,
+  "terminal.integrated.allowChords": false,
+  "editor.inlineSuggest.enabled": true,
+  "github.copilot.enable": {
+    "*": true,
+    "yaml": true,
+    "plaintext": true,
+    "markdown": true
+  },
+  "gitlens.codeLens.enabled": false,
+  "editor.renderWhitespace": "none",
+  "editor.renderControlCharacters": false,
+  //"vscode-neovim.neovimExecutablePaths.darwin": "/usr/local/bin/nvim",
   "ruby.useBundler": true,
   "ruby.useLanguageServer": true,
+  "ruby.format": "rubocop",
+  "ruby.rubocop.executePath": "/usr/local/bin/rubocop-daemon-wrapper/",
+  "ruby.rubocop.onSave": true,
   "ruby.lint": {
     "rubocop": {
       "useBundler": true
     },
-},
-"editor.cursorStyle": "line",
-"editor.wordSeparators": "/\\()\"':,.;<>~!@#$%^&*|+=[]{}`?-",
-"editor.wordWrap": "off",
-"editor.folding": false,
-"editor.glyphMargin": false,
-"terminal.integrated.allowChords": false,
-"editor.inlineSuggest.enabled": true,
-"rust-client.channel": "stable",
-"rust-client.rlsPath": "/opt/homebrew/opt/rust-analyzer/bin/rust-analyzer",
-"rust-client.disableRustup": true,
-  // This auto-fixes Ruby files, but is super slow
-  // "editor.formatOnSave": true,
-  // "[ruby]": {
-  //   "editor.defaultFormatter": "misogi.ruby-rubocop"
-  // }
+  },
+  "[ruby]": {
+    "editor.defaultFormatter": "misogi.ruby-rubocop",
+    "editor.formatOnSave": true,
+  },
+  "conceal.substitutions": [
+    {
+      "language": "ruby",
+      // "conceal.revealOn": "active-line",
+      "substitutions": [
+        {
+          "ugly": "lambda",
+          "pretty": "λ",
+          "post": "\\b"
+        }
+      ]
+    }
+  ],
+  "css.lint.unknownAtRules": "ignore",
+  "ruby-spec-runner.rspecDecorateEditorWithResults": true,
+  "ruby-spec-runner.rspecCodeLensPrompts": false,
+  "ruby-spec-runner.rspecCommand": "bundle exec bin/rspec",
+  "ruby-spec-runner.rspecCodeLensDebugPrompts": false,
+  "ruby-spec-runner.minitestCodeLensPrompts": false,
+  "security.workspace.trust.untrustedFiles": "open",
+  "editor.acceptSuggestionOnEnter": "off",
+  "window.zoomLevel": 1,
+  "rust-client.channel": "stable",
+  "rust-client.rlsPath": "/opt/homebrew/opt/rust-analyzer/bin/rust-analyzer",
+  "rust-client.disableRustup": true,
 }
