@@ -56,7 +56,7 @@
   // Run rspec on current line
   {
     "key": "cmd+shift+j",
-    "command": "macros.runSpec",
+    "command": "macros.runSpec"
   },
   // Focus termainal
   {
@@ -135,10 +135,6 @@
     "when": "editorTextFocus && !editorReadonly"
   },
   {
-    "key": "shift+cmd+b",
-    "command": "workbench.action.toggleActivityBarVisibility"
-  },
-  {
     "key": "ctrl+alt+l",
     "command": "ruby.rubocopAutocorrect",
     "when": "editorLangId == 'ruby'"
@@ -175,5 +171,17 @@
   {
     "key": "cmd+d",
     "command": "workbench.action.splitEditorRight"
+  },
+  {
+    "key": "cmd+r",
+    "command": "workbench.action.tasks.build"
+  },
+  {
+    "key": "shift+cmd+b",
+    "command": "-workbench.action.tasks.build"
+  },
+  {
+    "key": "shift+cmd+b",
+    "command": "workbench.action.toggleActivityBarVisibility"
   }
 ]

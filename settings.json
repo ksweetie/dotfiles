@@ -10,6 +10,7 @@
   "explorer.autoReveal": false,
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
+  "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
   "editor.detectIndentation": false,
   "workbench.colorTheme": "Visual Studio Light",
@@ -30,6 +31,9 @@
     "typescript",
     "typescriptreact"
   ],
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "javascript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
   "typescript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
   "editor.codeActionsOnSave": {
@@ -38,7 +42,7 @@
   "[js]": {
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": false
-    },
+    }
   },
   "workbench.colorCustomizations": {
     "editorCursor.foreground": "#2cc16f"
@@ -60,7 +64,7 @@
       "commands": [
         "editor.action.outdentLines"
       ]
-    },
+    }
   ],
   "vim.normalModeKeyBindingsNonRecursive": [
     {
@@ -93,7 +97,7 @@
       "after": [
         "k",
         "^"
-      ],
+      ]
     },
     {
       "before": [
@@ -103,7 +107,7 @@
         "y",
         "$"
       ]
-    },
+    }
   ],
   "vim.useSystemClipboard": true,
   "vim.leader": ",",
@@ -180,11 +184,11 @@
   "ruby.lint": {
     "rubocop": {
       "useBundler": true
-    },
+    }
   },
   "[ruby]": {
     "editor.defaultFormatter": "misogi.ruby-rubocop",
-    "editor.formatOnSave": true,
+    "editor.formatOnSave": true
   },
   "conceal.substitutions": [
     {
@@ -207,8 +211,32 @@
   "ruby-spec-runner.minitestCodeLensPrompts": false,
   "security.workspace.trust.untrustedFiles": "open",
   "editor.acceptSuggestionOnEnter": "off",
-  "window.zoomLevel": 1,
+  "window.zoomLevel": 3,
   "rust-client.channel": "stable",
   "rust-client.rlsPath": "/opt/homebrew/opt/rust-analyzer/bin/rust-analyzer",
   "rust-client.disableRustup": true,
+  "rust-analyzer.lens.enable": false,
+  "rust-analyzer.lens.run": false,
+  "rust-analyzer.lens.implementations": false,
+  "rust-analyzer.lens.debug": false,
+  "rust-analyzer.inlayHints.enable": false,
+  "[rust]": {
+    "editor.formatOnSave": true
+    // "editor.defaultFormatter": "jinxdash.prettier-rust"
+  },
+  "editor.semanticTokenColorCustomizations": {
+    "rules": {
+      "*.mutable": {
+        "fontStyle": "" // Remove underlines from mutable objects. Maybe change this to something else?
+      }
+    }
+  },
+  // "rust-analyzer.hover.actions.run.enable": false,
+  "rust-analyzer.cargo.buildScripts.enable": false,
+  "rust-analyzer.inlayHints.chainingHints.enable": false,
+  "rust-analyzer.inlayHints.closingBraceHints.enable": false,
+  "rust-analyzer.inlayHints.parameterHints.enable": false,
+  "rust-analyzer.inlayHints.renderColons": false,
+  "rust-analyzer.inlayHints.typeHints.enable": false,
+  "lldb.suppressUpdateNotifications": true
 }

@@ -49,6 +49,7 @@ ntimes() { for i in `seq $1` ; do $2 ; [[ ! $? = 0 ]] && break ; done }
 alias checkports="lsof -wni tcp:3000"
 alias dirsize="find . -maxdepth 1 -mindepth 1 -type d -exec du -hs {} \; | sort -hr"
 alias kill3001="lsof -n -i4TCP:3001 | grep LISTEN | tr -s ' ' | cut -f 2 -d ' ' | xargs kill -9"
+alias volt="~/voltageshift_1.25/voltageshift turbo 0; ~/voltageshift_1.25/voltageshift power 30 60"
 
 # git aliases
 alias gs="git status"
@@ -104,10 +105,11 @@ apply_diff() {
 
 # powerline
 export PATH=$PATH:$HOME/Library/Python/2.7/bin
+export PATH=$PATH:$HOME/Library/Python/3.9/bin
 powerline-daemon -q
 POWERLINE_BASH_CONTINUATION=1
 POWERLINE_BASH_SELECT=1
-. /Users/kevinsweet/Library/Python/2.7/lib/python/site-packages/powerline/bindings/bash/powerline.sh
+source /usr/local/lib/python3.9/site-packages/powerline/bindings/bash/powerline.sh
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
