@@ -13,7 +13,7 @@
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
   "editor.detectIndentation": false,
-  "workbench.colorTheme": "Visual Studio Light",
+  "workbench.colorTheme": "Default Light+",
   "workbench.editor.highlightModifiedTabs": true,
   "editor.fontFamily": "FiraCode-Retina, Menlo, Monaco, 'Courier New', monospace",
   "editor.fontLigatures": true,
@@ -37,12 +37,12 @@
   "javascript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
   "typescript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   "[js]": {
     "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": false
-    }
+      "source.fixAll.eslint": "never"
+    },
   },
   "workbench.colorCustomizations": {
     "editorCursor.foreground": "#2cc16f"
@@ -176,19 +176,17 @@
   "editor.renderWhitespace": "none",
   "editor.renderControlCharacters": false,
   //"vscode-neovim.neovimExecutablePaths.darwin": "/usr/local/bin/nvim",
-  "ruby.useBundler": true,
-  "ruby.useLanguageServer": true,
-  "ruby.format": "rubocop",
-  "ruby.rubocop.executePath": "/usr/local/bin/rubocop-daemon-wrapper/",
-  "ruby.rubocop.onSave": true,
-  "ruby.lint": {
-    "rubocop": {
-      "useBundler": true
-    }
-  },
+
+  // Old rubocop-daemon config
+  // "ruby.rubocop.executePath": "/usr/local/bin/rubocop-daemon-wrapper/",
+  // "ruby.rubocop.onSave": true,
+  // "[ruby]": {
+  //   "editor.defaultFormatter": "misogi.ruby-rubocop",
+  // },
+
   "[ruby]": {
-    "editor.defaultFormatter": "misogi.ruby-rubocop",
-    "editor.formatOnSave": true
+    "editor.defaultFormatter": "rubocop.vscode-rubocop",
+    "editor.formatOnSave": true,
   },
   "conceal.substitutions": [
     {
@@ -206,7 +204,8 @@
   "css.lint.unknownAtRules": "ignore",
   "ruby-spec-runner.rspecDecorateEditorWithResults": true,
   "ruby-spec-runner.rspecCodeLensPrompts": false,
-  "ruby-spec-runner.rspecCommand": "bundle exec bin/rspec",
+  // "ruby-spec-runner.rspecCommand": "bundle exec bin/spring rspec",
+  "ruby-spec-runner.rspecCommand": "bundle exec rspec",
   "ruby-spec-runner.rspecCodeLensDebugPrompts": false,
   "ruby-spec-runner.minitestCodeLensPrompts": false,
   "security.workspace.trust.untrustedFiles": "open",
@@ -239,4 +238,8 @@
   "rust-analyzer.inlayHints.renderColons": false,
   "rust-analyzer.inlayHints.typeHints.enable": false,
   "lldb.suppressUpdateNotifications": true
+  "window.zoomLevel": 2,
+  "rubyLsp.enableExperimentalFeatures": false,
+  "vim.textwidth": 120,
+  "editor.inlineSuggest.suppressSuggestions": true,
 }
