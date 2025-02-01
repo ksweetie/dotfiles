@@ -1,0 +1,26 @@
+[
+  {
+    "bindings": {
+      "cmd-shift-r": ["workspace::SendKeystrokes", "cmd-shift-p workspace: reload enter"],
+      "ctrl-alt-cmd-space": "project_panel::CollapseAllEntries",
+      "shift-escape": null // Unbind default binding
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "cmd-shift-j": ["task::Spawn", { "task_name": "run spec" }],
+      "cmd-shift-e": "pane::RevealInProjectPanel",
+      "cmd-shift-c": ["workspace::SendKeystrokes", "cmd-shift-e ctrl-alt-cmd-space cmd-shift-e"],
+      "cmd-y": "editor::DuplicateLineDown",
+      "alt-{": "pane::SwapItemLeft",
+      "alt-}": "pane::SwapItemRight"
+    }
+  },
+  {
+    "context": "Pane",
+    "bindings": {
+      "cmd-shift-c": "project_panel::CollapseAllEntries"
+    }
+  }
+]
