@@ -30,9 +30,6 @@
     "folds": false,
     "runnables": false
   },
-  // "features": {
-  //   "inline_completion_provider": "supermaven"
-  // },
   "languages": {
     "Ruby": {
       "language_servers": ["ruby-lsp", "rubocop", "!solargraph", "..."]
@@ -65,10 +62,9 @@
   },
   "relative_line_numbers": true,
   "scroll_beyond_last_line": "off",
-  // The following fixes this bug: https://github.com/zed-industries/zed/issues/22252 but might want to disable it if that gets fixed?
   "scrollbar": {
     "axes": {
-      "horizontal": false
+      "horizontal": false // Fixes this bug: https://github.com/zed-industries/zed/issues/22252 but might want to disable it if that gets fixed?
     }
   },
   "show_nav_history_buttons": false,
@@ -89,7 +85,7 @@
   "theme": {
     "mode": "system",
     "light": "macOS Classic Light",
-    "dark": "One Dark"
+    "dark": "Catppuccin Frappé (Blue Blur+)"
   },
   // This hides an entire toolbar below the tabs
   "toolbar": {
