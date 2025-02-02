@@ -3,6 +3,7 @@
     "inactive_opacity": 0.5
   },
   "assistant": {
+    "button": false,
     "default_model": {
       "provider": "zed.dev",
       "model": "claude-3-5-sonnet-latest"
@@ -13,9 +14,15 @@
   "base_keymap": "VSCode",
   "buffer_font_size": 16,
   "buffer_line_height": { "custom": 1.5 },
+  "collaboration_panel": {
+    "button": false
+  },
   "cursor_blink": false,
   "experiments": {
     "experimental_themes": true
+  },
+  "features": {
+    "inline_completion_provider": "copilot"
   },
   "file_scan_exclusions": [".yarn/releases/*.cjs"],
   "file_scan_inclusions": [".env"],
@@ -24,7 +31,6 @@
       "show_commit_summary": true
     }
   },
-  // Disabling these reduces how wide the gutter is. I haven't found these helpful so far, but maybe worth trying again later.
   "gutter": {
     "code_actions": false,
     "folds": false,
@@ -51,11 +57,18 @@
       }
     }
   },
+  "notification_panel": {
+    "button": false
+  },
+  "outline_panel": {
+    "button": false
+  },
   "preferred_line_length": 120,
   "preview_tabs": {
     "enabled": false
   },
   "project_panel": {
+    "button": false,
     "indent_size": 10,
     "file_icons": true,
     "auto_reveal_entries": false
@@ -67,8 +80,6 @@
       "horizontal": false // Fixes this bug: https://github.com/zed-industries/zed/issues/22252 but might want to disable it if that gets fixed?
     }
   },
-  "show_nav_history_buttons": false,
-  "show_tab_bar_buttons": true,
   "show_user_picture": false,
   "tabs": {
     "file_icons": true,
@@ -80,6 +91,7 @@
   },
   "tab_size": 2,
   "terminal": {
+    "button": false,
     "dock": "right"
   },
   "theme": {
@@ -87,7 +99,6 @@
     "light": "macOS Classic Light",
     "dark": "Catppuccin Frappé (Blue Blur+)"
   },
-  // This hides an entire toolbar below the tabs
   "toolbar": {
     "breadcrumbs": false,
     "quick_actions": false,
