@@ -1,11 +1,9 @@
-source ~/.bashrc
-
 export PGGSSENCMODE="disable" # Fix Spring SegFault
-eval "$(rbenv init -)"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
 export PATH="/usr/local/bin/rubocop-daemon-wrapper:$PATH"
 export PATH="$HOMEBREW_PREFIX/opt/coreutils/libexec/gnubin:$PATH" # coreutils, used by git-quick-stats
+export PATH="/Users/kevinsweet/.local/bin:$PATH" # pipx
 export EDITOR="nvim"
 export VISUAL="zed"
 export DISABLE_SPRING=true
@@ -13,6 +11,7 @@ export RUBY_YJIT_ENABLE=1
 # export RUBYOPT="--disable=yjit"
 # export NVM_DIR=~/.nvm
 export BASH_SILENCE_DEPRECATION_WARNING=1
+export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 
 # yarn
 alias yt="yarn test"
@@ -54,6 +53,8 @@ alias mydbcleanup='psql --list | grep -v "wunder_portal" | grep -E "branch_ks_" 
 alias dbcleanup='psql --list | grep -v "wunder_portal" | grep -E "branch_(ai|aq|bb|bj|ep|head)_" | cut -d " " -f 2 | xargs -p -t -n 1 dropdb'
 
 # misc
+alias c="cd"
+alias l="ls -lah --color"
 ntimes() { for i in `seq $1` ; do $2 ; [[ ! $? = 0 ]] && break ; done }
 alias checkports="lsof -wni tcp:3000"
 alias dirsize="find . -maxdepth 1 -mindepth 1 -type d -exec du -hs {} \; | sort -hr"
@@ -121,3 +122,7 @@ export NVM_DIR="$HOME/.nvm"
 eval "$(/opt/homebrew/bin/brew shellenv)"
 export PATH="${HOMEBREW_PREFIX}/opt/postgresql@16/bin:$PATH"
 . "$HOME/.cargo/env"
+
+eval "$(rbenv init -)"
+
+source ~/.bashrc

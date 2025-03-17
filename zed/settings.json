@@ -11,8 +11,8 @@
   "assistant": {
     "button": false,
     "default_model": {
-      "provider": "copilot_chat",
-      "model": "claude-3-7-sonnet"
+      "provider": "zed.dev",
+      "model": "claude-3-7-sonnet-latest"
     },
     "enable_experimental_live_diffs": true,
     "version": "2"
@@ -31,7 +31,7 @@
   "features": {
     "edit_prediction_provider": "zed"
   },
-  "file_scan_exclusions": [".yarn/releases/*.cjs"],
+  "file_scan_exclusions": [".yarn/releases/*.cjs", "**/*.gd.uid"],
   "file_scan_inclusions": [".env"],
   "git": {
     "inline_blame": {
@@ -51,6 +51,14 @@
     "JavaScript": {
       "language_servers": [],
       "prettier": { "allowed": false }
+    "GDScript": {
+      "hard_tabs": true,
+      "format_on_save": {
+        "external": {
+          "command": "gdformat",
+          "arguments": ["-", "--line-length", "120"]
+        }
+      }
     },
     "Ruby": {
       "language_servers": ["ruby-lsp", "rubocop", "!solargraph", "..."]
