@@ -2,6 +2,8 @@
   {
     "bindings": {
       "cmd-shift-r": ["workspace::SendKeystrokes", "cmd-shift-p workspace: reload enter"],
+      "cmd-shift-e": "project_panel::ToggleFocus",
+      "cmd-shift-g": "git_panel::ToggleFocus",
       "ctrl-alt-cmd-space": "project_panel::CollapseAllEntries",
       "shift-escape": null // Unbind default binding
     }
@@ -12,6 +14,7 @@
       "cmd-shift-j": ["task::Spawn", { "task_name": "run spec" }],
       "cmd-shift-e": "pane::RevealInProjectPanel",
       "cmd-shift-c": ["workspace::SendKeystrokes", "cmd-shift-e ctrl-alt-cmd-space cmd-shift-e"],
+      "cmd-alt-shift-c": ["workspace::SendKeystrokes", "cmd-shift-p editor: copy file location enter"],
       "cmd-y": "editor::DuplicateLineDown",
       "alt-{": "pane::SwapItemLeft",
       "alt-}": "pane::SwapItemRight"

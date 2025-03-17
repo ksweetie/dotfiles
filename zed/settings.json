@@ -1,28 +1,35 @@
 {
+  "theme": {
+    "mode": "light",
+    "light": "macOS Classic Light",
+    "dark": "Catppuccin Frappé (Blue Blur+)"
+  },
+  "icon_theme": "VSCode Icons (Light)",
   "active_pane_modifiers": {
     "inactive_opacity": 0.5
   },
   "assistant": {
     "button": false,
     "default_model": {
-      "provider": "zed.dev",
-      "model": "claude-3-5-sonnet-latest"
+      "provider": "copilot_chat",
+      "model": "claude-3-7-sonnet"
     },
     "enable_experimental_live_diffs": true,
     "version": "2"
   },
   "base_keymap": "VSCode",
-  "buffer_font_size": 16,
+  "buffer_font_size": 16.0,
   "buffer_line_height": { "custom": 1.5 },
   "collaboration_panel": {
     "button": false
   },
+  "current_line_highlight": "none",
   "cursor_blink": false,
   "experiments": {
     "experimental_themes": true
   },
   "features": {
-    "inline_completion_provider": "copilot"
+    "edit_prediction_provider": "zed"
   },
   "file_scan_exclusions": [".yarn/releases/*.cjs"],
   "file_scan_inclusions": [".env"],
@@ -31,12 +38,20 @@
       "show_commit_summary": true
     }
   },
+  "git_panel": {
+    "button": false,
+    "default_width": 500
+  },
   "gutter": {
     "code_actions": false,
     "folds": false,
     "runnables": false
   },
   "languages": {
+    "JavaScript": {
+      "language_servers": [],
+      "prettier": { "allowed": false }
+    },
     "Ruby": {
       "language_servers": ["ruby-lsp", "rubocop", "!solargraph", "..."]
     },
@@ -68,10 +83,11 @@
     "enabled": false
   },
   "project_panel": {
+    "auto_reveal_entries": false,
     "button": false,
-    "indent_size": 10,
+    "default_width": 500,
     "file_icons": true,
-    "auto_reveal_entries": false
+    "indent_size": 12
   },
   "relative_line_numbers": true,
   "scroll_beyond_last_line": "off",
@@ -93,11 +109,6 @@
   "terminal": {
     "button": false,
     "dock": "right"
-  },
-  "theme": {
-    "mode": "system",
-    "light": "macOS Classic Light",
-    "dark": "Catppuccin Frappé (Blue Blur+)"
   },
   "toolbar": {
     "breadcrumbs": false,

@@ -22,6 +22,7 @@ alias ytwrib="yarn test-watch --runInBand"
 # rails aliases
 alias rc="be bin/spring rails c"
 alias fs="NODE_OPTIONS=--openssl-legacy-provider bundle exec foreman start -f Procfile.dev"
+alias fs_no_sidekiq="NODE_OPTIONS=--openssl-legacy-provider bundle exec foreman start -f Procfile.dev all=1,sidekiq_worker=0,sidekiq_serial=0,sidekiq_deducktions=0,sidekiq_data_pipelines_worker=0"
 alias fscustom="bundle exec foreman start -f Procfile.ksweetie.dev"
 alias wds="env ./bin/webpack-dev-server --profile --progress"
 alias be="bundle exec "
@@ -61,6 +62,7 @@ alias volt="~/voltageshift_1.25/voltageshift turbo 0; ~/voltageshift_1.25/voltag
 
 # git aliases
 alias gs="git status"
+alias gpo="git push"
 alias gp="git pull"
 alias ga="git add -A; git status"
 alias gb="git branch"
@@ -80,9 +82,9 @@ gcob() {
 gc() {
   git commit -m "$1"
 }
-gpo() {
-  git push origin "$1"
-}
+# gpo() {
+#   git push origin "$1"
+# }
 gfpo() {
   git push origin "$1" --force
 }
