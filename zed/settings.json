@@ -51,6 +51,7 @@
     "JavaScript": {
       "language_servers": [],
       "prettier": { "allowed": false }
+    },
     "GDScript": {
       "hard_tabs": true,
       "format_on_save": {
