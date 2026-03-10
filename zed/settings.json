@@ -207,6 +207,7 @@
     },
   },
   "search": { "button": false },
+  "status_bar": { "experimental.show": false },
   "tabs": {
     "file_icons": true,
     "git_status": true,
