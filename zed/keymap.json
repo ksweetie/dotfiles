@@ -5,7 +5,7 @@
       "cmd-shift-e": "project_panel::ToggleFocus",
       "cmd-shift-g": "git_panel::ToggleFocus",
       "ctrl-alt-cmd-space": "project_panel::CollapseAllEntries",
-      "alt-shift-w": "workspace::ClearAllNotifications",
+      "alt-w": "workspace::ClearAllNotifications",
       "shift-escape": null // Unbind default binding
     }
   },

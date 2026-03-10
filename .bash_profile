@@ -3,7 +3,8 @@ export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
 export PATH="/usr/local/bin/rubocop-daemon-wrapper:$PATH"
 export PATH="$HOMEBREW_PREFIX/opt/coreutils/libexec/gnubin:$PATH" # coreutils, used by git-quick-stats
-export PATH="/Users/kevinsweet/.local/bin:$PATH" # pipx
+export PATH=/opt/homebrew/opt/python\@3.10/libexec/bin:$PATH # python3.10
+# export PATH="/Users/kevinsweet/.local/bin:$PATH" # pipx
 export EDITOR="nvim"
 export VISUAL="zed"
 export DISABLE_SPRING=true
@@ -60,6 +61,7 @@ alias checkports="lsof -wni tcp:3000"
 alias dirsize="find . -maxdepth 1 -mindepth 1 -type d -exec du -hs {} \; | sort -hr"
 alias kill3001="lsof -n -i4TCP:3001 | grep LISTEN | tr -s ' ' | cut -f 2 -d ' ' | xargs kill -9"
 alias volt="~/voltageshift_1.25/voltageshift turbo 0; ~/voltageshift_1.25/voltageshift power 30 60"
+alias godot='/Applications/Godot.app/Contents/MacOS/Godot'
 
 # git aliases
 alias gs="git status"
