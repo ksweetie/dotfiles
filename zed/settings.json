@@ -1,124 +1,260 @@
 {
-  "diff_view_style": "unified",
-  "theme": "macOS Classic Dark",
-  "icon_theme": "Catppuccin Latte",
+  "colorize_brackets": true,
+  "sticky_scroll": {
+    "enabled": true,
+  },
+  "features": {
+    "edit_prediction_provider": "zed",
+  },
+  "theme": {
+    "mode": "dark",
+    "light": "macOS Classic Light",
+    "dark": "Nightfox - opaque",
+  },
+  "icon_theme": "VSCode Icons for Zed (Dark)",
   "active_pane_modifiers": {
-    "inactive_opacity": 0.5
+    "inactive_opacity": 0.5,
   },
   "agent": {
-    "always_allow_tool_actions": true,
+    "favorite_models": [
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-4-5-latest",
+      },
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-4-5-thinking-latest",
+      },
+      {
+        "provider": "anthropic",
+        "model": "claude-sonnet-4-5-latest",
+      },
+    ],
+    "profiles": {
+      "ask": {
+        "name": "Ask",
+        "tools": {
+          "contents": true,
+          "diagnostics": true,
+          "fetch": true,
+          "list_directory": true,
+          "now": true,
+          "find_path": true,
+          "read_file": true,
+          "open": true,
+          "grep": true,
+          "thinking": true,
+          "web_search": true,
+        },
+        "enable_all_context_servers": false,
+        "context_servers": {
+          "mcp-server-github": {
+            "tools": {
+              "search_users": true,
+              "search_repositories": true,
+              "search_issues": true,
+              "search_code": true,
+              "list_secret_scanning_alerts": true,
+              "list_pull_requests": true,
+              "list_issues": true,
+              "list_commits": true,
+              "list_code_scanning_alerts": true,
+              "list_branches": true,
+              "get_secret_scanning_alert": true,
+              "get_pull_request_status": true,
+              "get_pull_request_reviews": true,
+              "get_pull_request_files": true,
+              "get_pull_request_comments": true,
+              "get_pull_request": true,
+              "get_code_scanning_alert": true,
+              "get_commit": true,
+              "get_file_contents": true,
+              "get_me": true,
+              "get_issue_comments": true,
+              "get_issue": true,
+            },
+          },
+          "postgres-context-server": {
+            "tools": {
+              "query": true,
+              "pg-schema": true,
+            },
+          },
+        },
+      },
+    },
     "default_profile": "write",
+    "always_allow_tool_actions": true,
     "button": false,
     "default_model": {
-      "provider": "copilot_chat",
-      "model": "claude-3.5-sonnet"
-    }
+      "provider": "anthropic",
+      "model": "claude-opus-4-5-latest",
+    },
   },
   "base_keymap": "VSCode",
   "buffer_font_size": 16.0,
   "buffer_line_height": { "custom": 1.5 },
   "collaboration_panel": {
-    "button": false
+    "button": false,
+  },
+  "context_servers": {
+    "chrome-devtools-mcp-zed": {
+      "settings": {
+        "browser_url": "http://astra.wunderdev.com:3000/",
+      },
+    },
   },
   "current_line_highlight": "none",
   "cursor_blink": false,
-  "features": {
-    "edit_prediction_provider": "zed"
+  "debugger": {
+    "button": false,
+  },
+  "diagnostics": {
+    "include_warnings": false,
   },
   "file_scan_exclusions": [".yarn/releases/*.cjs", "**/*.gd.uid"],
   "file_scan_inclusions": [".env"],
+  "format_on_save": "on",
   "git": {
     "inline_blame": {
-      "show_commit_summary": true
-    }
+      "show_commit_summary": true,
+    },
   },
   "git_panel": {
+    "collapse_untracked_diff": false,
+    "sort_by_path": true,
+    "tree_view": true,
     "button": false,
-    "default_width": 500
+    "default_width": 500,
+  },
+  "global_lsp_settings": {
+    "button": true,
   },
   "gutter": {
+    "line_numbers": true,
+    "breakpoints": false,
+    "runnables": false,
     "folds": false,
-    "runnables": false
   },
+  "inline_code_actions": false,
   "languages": {
     "JavaScript": {
-      "language_servers": [],
-      "prettier": { "allowed": false }
+      "language_servers": ["!eslint", "!typescript-language-server", "!vtsls"],
+      "prettier": { "allowed": false },
     },
     "GDScript": {
+      "hard_tabs": true,
       "formatter": {
         "external": {
           "command": "gdformat",
-          "arguments": ["-", "--line-length", "120"]
-        }
+          "arguments": ["-", "--line-length", "120"],
+        },
       },
-      "hard_tabs": true,
-      "format_on_save": "on"
+    },
+    "Markdown": {
+      "format_on_save": "off",
     },
     "Ruby": {
-      "language_servers": ["ruby-lsp", "rubocop"]
+      "language_servers": ["ruby-lsp", "rubocop", "!solargraph"],
     },
     "Rust": {
-      "tab_size": 4
-    }
+      "tab_size": 4,
+    },
+    "YAML": {
+      "format_on_save": "off",
+    },
   },
   "lsp": {
     "rubocop": {
-      "initialization_options": {}
+      "initialization_options": {
+        "safeAutocorrect": false,
+      },
     },
     "ruby-lsp": {
       "initialization_options": {
+        "experimentalFeaturesEnabled": true,
         "enabledFeatures": {
           "diagnostics": false,
-          "onTypeFormatting": false
-        }
-      }
-    }
+          "onTypeFormatting": false,
+        },
+      },
+    },
   },
   "notification_panel": {
-    "button": false
+    "button": false,
   },
   "outline_panel": {
-    "button": false
+    "button": false,
+    "default_width": 500,
   },
   "preferred_line_length": 120,
   "preview_tabs": {
-    "enabled": false
+    "enabled": false,
   },
   "project_panel": {
     "auto_reveal_entries": false,
     "button": false,
     "default_width": 500,
     "file_icons": true,
-    "indent_size": 12
+    "indent_size": 12,
   },
   "relative_line_numbers": "enabled",
   "scroll_beyond_last_line": "off",
   "scrollbar": {
+    "show": "system",
     "axes": {
-      "horizontal": false // Fixes this bug: https://github.com/zed-industries/zed/issues/22252 but might want to disable it if that gets fixed?
-    }
+      "horizontal": false, // Fixes this bug: https://github.com/zed-industries/zed/issues/22252 but might want to disable it if that gets fixed?
+    },
   },
+  "search": { "button": false },
   "tabs": {
     "file_icons": true,
-    "git_status": true
+    "git_status": true,
   },
   "tab_bar": {
     "show_nav_history_buttons": false,
-    "show_tab_bar_buttons": false
+    "show_tab_bar_buttons": false,
   },
   "tab_size": 2,
   "terminal": {
     "button": false,
-    "dock": "right"
+    "dock": "right",
+  },
+  "theme_overrides": {
+    "Catppuccin Frappé": {
+      "syntax": {
+        "comment": { "font_style": "italic" },
+        "comment.doc": { "font_style": "italic" },
+        "function": { "font_style": "italic" },
+        "function.method": { "font_style": "italic" },
+        "variable.special": { "font_style": "normal" },
+      },
+    },
+    "macOS Classic Light": {
+      "syntax": {
+        "comment": { "font_style": "italic" },
+        "comment.doc": { "font_style": "italic" },
+        "function": { "font_style": "italic" },
+      },
+      "version_control.added": "#27a657ff",
+      "version_control.modified": "#d3b020ff",
+      "version_control.deleted": "#e06c76ff",
+      "version_control.conflict_marker.ours": "#a1c1811a",
+      "version_control.conflict_marker.theirs": "#74ade81a",
+    },
+  },
+  "title_bar": {
+    "show_branch_icon": true,
+    "show_project_items": false,
+    "show_user_picture": false,
   },
   "toolbar": {
     "breadcrumbs": false,
     "quick_actions": false,
-    "selections_menu": false
+    "selections_menu": false,
   },
   "ui_font_size": 16,
   "vertical_scroll_margin": 5,
   "vim_mode": true,
-  "wrap_guides": [120]
+  "wrap_guides": [120],
 }
