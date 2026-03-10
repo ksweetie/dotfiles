@@ -1,21 +1,24 @@
 {
+  "edit_predictions": {
+    "provider": "zed"
+  },
   "colorize_brackets": true,
   "sticky_scroll": {
     "enabled": true,
   },
-  "features": {
-    "edit_prediction_provider": "zed",
-  },
   "theme": {
     "mode": "dark",
     "light": "macOS Classic Light",
-    "dark": "Nightfox - opaque",
+    "dark": "One Hunter Classic",
   },
   "icon_theme": "VSCode Icons for Zed (Dark)",
   "active_pane_modifiers": {
     "inactive_opacity": 0.5,
   },
   "agent": {
+    "tool_permissions": {
+      "default": "allow"
+    },
     "favorite_models": [
       {
         "provider": "anthropic",
@@ -84,7 +87,6 @@
       },
     },
     "default_profile": "write",
-    "always_allow_tool_actions": true,
     "button": false,
     "default_model": {
       "provider": "anthropic",
