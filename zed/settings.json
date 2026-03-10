@@ -1,7 +1,4 @@
 {
-  "edit_predictions": {
-    "provider": "zed"
-  },
   "colorize_brackets": true,
   "sticky_scroll": {
     "enabled": true,
@@ -16,9 +13,6 @@
     "inactive_opacity": 0.5,
   },
   "agent": {
-    "tool_permissions": {
-      "default": "allow"
-    },
     "favorite_models": [
       {
         "provider": "anthropic",
@@ -209,7 +203,6 @@
     },
   },
   "search": { "button": false },
-  "status_bar": { "experimental.show": false },
   "tabs": {
     "file_icons": true,
     "git_status": true,
