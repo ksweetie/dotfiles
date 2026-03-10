@@ -91,6 +91,7 @@ else
   alias l="ls -lahG"
 fi
 command -v bat >/dev/null 2>&1 && alias cat="bat --style=plain --paging=never"
+alias vim="nvim"
 command -v fd >/dev/null 2>&1 && alias find="fd"
 alias c="cd"
 alias reload="exec zsh -l"
@@ -156,32 +157,74 @@ alias gb="git branch"
 alias grh="git reset 'HEAD^'"
 alias gf="git commit --amend --no-edit"
 alias gl="git log --graph --pretty=format:'%Cred%h%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias gci="git branch --format='%(refname:short)' | gum choose --height=20 | xargs git checkout"
 alias gdall="git branch -vv | grep 'origin/.*: gone]' | awk '{print \$1}' | xargs git branch -d"
 alias gcempty="git commit --allow-empty -m 'Empty commit'"
 alias gan="git add -N --no-all ."
 alias grn="git reset --mixed"
 
 gco() { git checkout "$1"; }
+gcoo() { git checkout "origin/$1"; }
 gcob() { git checkout -b "$1"; }
-gc() { git commit -m "$*"; }
+
+gm() {
+  local target=$(git branch --list --format='%(refname:short)' main master | head -n1)
+  local current=$(git branch --show-current)
+  if [[ "$current" == "$target" ]]; then
+    echo "Already on $target"
+  else
+    git checkout "$target"
+  fi
+}
+
+gc() {
+  git commit -m "$(gum input --width 50 --placeholder 'Summary of changes')" \
+             -m "$(gum write --width 80 --placeholder 'Details of changes')"
+}
+
 gfpo() { git push origin "$1" --force; }
 gd() { git branch -d "$1"; }
 gD() { git branch -D "$1"; }
 
 gdi() {
-  command -v fzf >/dev/null 2>&1 || return 1
-  local branches
-  branches="$(git branch --format='%(refname:short)' | grep -v '^master$' | fzf -m --layout=reverse)"
-  [[ -z "$branches" ]] && return 0
-  print -r -- "$branches" | xargs -I {} git branch -d "{}"
+  local selection=$(git branch --format='%(if)%(worktreepath)%(then)+ %(else)  %(end)%(refname:short)' |
+    grep -v -e 'master$' -e 'main$' |
+    gum choose --height=20 --no-limit --header "Select to delete ( + = Worktree )")
+
+  if [[ -z "$selection" ]]; then
+    echo "No selection made."
+    return 0
+  fi
+
+  local line branch wt_path
+  while IFS= read -r line; do
+    branch=$(echo "$line" | sed 's/^[+ ]*//')
+
+    if [[ "$line" == "+"* ]]; then
+      wt_path=$(git worktree list --porcelain | grep -B 2 "branch refs/heads/$branch" | grep "^worktree" | cut -d' ' -f2)
+      if [[ -n "$wt_path" ]]; then
+        echo "Removing worktree at $wt_path..."
+        git worktree remove "$wt_path"
+      fi
+    fi
+
+    git branch -D "$branch"
+  done <<< "$selection"
 }
 
 gDi() {
-  command -v fzf >/dev/null 2>&1 || return 1
-  local branches
-  branches="$(git branch --format='%(refname:short)' | grep -v '^master$' | fzf -m --layout=reverse)"
-  [[ -z "$branches" ]] && return 0
-  print -r -- "$branches" | xargs -I {} git branch -D "{}"
+  git branch --format='%(refname:short)' | grep -v -e '^master$' -e '^main$' | gum choose --height=20 --no-limit | xargs git branch -D
+}
+
+gwt() {
+  local branch=$1
+  local base=${2:-master}
+  if [[ -z "$branch" ]]; then
+    echo "Usage: gwt <branch-name> [base-ref]"
+    return 1
+  fi
+  git worktree add "../$branch" -b "$branch" "$base"
+  cd "../$branch"
 }
 
 showchanged() { git diff-tree --no-commit-id --name-only -r "$1"; }
@@ -201,6 +244,12 @@ if [[ -f "$HOME/.zshrc.local" ]]; then
   source "$HOME/.zshrc.local"
 fi
 
+# Ghostty shell integration
+if [[ -n "${GHOSTTY_RESOURCES_DIR}" ]]; then
+  source "${GHOSTTY_RESOURCES_DIR}/shell-integration/zsh/ghostty-integration"
+fi
+
 if [[ "${TERM:-}" != "dumb" ]] && command -v starship >/dev/null 2>&1; then
   eval "$(starship init zsh)"
 fi
+export PATH="$HOME/.local/bin:$PATH"
