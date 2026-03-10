@@ -203,6 +203,12 @@
     },
   },
   "search": { "button": false },
+  "status_bar": {
+    "active_language_button": false,
+    "cursor_position_button": false,
+    "experimental.show": false,
+    "line_endings_button": false,
+  },
   "tabs": {
     "file_icons": true,
     "git_status": true,
