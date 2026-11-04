@@ -68,23 +68,6 @@ if [[ "${TERM:-}" != "dumb" ]]; then
   fi
 fi
 
-if command -v rbenv >/dev/null 2>&1; then
-  path=("$HOME/.rbenv/shims" $path)
-fi
-
-_load_nvm() {
-  unset -f nvm node npm npx yarn pnpm corepack _load_nvm
-  [[ -s "$NVM_DIR/nvm.sh" ]] && . "$NVM_DIR/nvm.sh"
-}
-
-nvm() { _load_nvm; nvm "$@"; }
-node() { _load_nvm; node "$@"; }
-npm() { _load_nvm; npm "$@"; }
-npx() { _load_nvm; npx "$@"; }
-yarn() { _load_nvm; yarn "$@"; }
-pnpm() { _load_nvm; pnpm "$@"; }
-corepack() { _load_nvm; corepack "$@"; }
-
 if command -v eza >/dev/null 2>&1; then
   alias l="eza -la --group-directories-first --icons=auto"
 else
@@ -104,8 +87,6 @@ alias ytwrib="yarn test-watch --runInBand"
 # Rails
 alias rc="be bin/spring rails c"
 alias fs="NODE_OPTIONS=--openssl-legacy-provider bundle exec foreman start -f Procfile.dev"
-alias fs_no_sidekiq="NODE_OPTIONS=--openssl-legacy-provider bundle exec foreman start -f Procfile.dev all=1,sidekiq_worker=0,sidekiq_serial=0,sidekiq_deducktions=0,sidekiq_data_pipelines_worker=0"
-alias fscustom="bundle exec foreman start -f Procfile.ksweetie.dev"
 alias wds="env ./bin/webpack-dev-server --profile --progress"
 alias be="bundle exec"
 alias r="bundle exec rails"
@@ -117,20 +98,6 @@ alias spring="bin/spring"
 alias rake="bin/rake"
 alias taild="tail -f log/development.log"
 spec() { bundle exec bin/spring rspec "$@"; }
-
-# Wunder
-alias prodr="heroku run \"CONSOLE_USER_EMAIL=kevinsweet@wundercapital.com RAILS_ENV=read_only SKIP_SANITY_CHECK=true rails c -- --nomultiline\" --size=Performance-L -a wunder-portal-production"
-alias prodw="heroku run \"CONSOLE_USER_EMAIL=kevinsweet@wundercapital.com rails c -- --nomultiline\" --size=Performance-L -a wunder-portal-production"
-alias prodw_db_pool="heroku run \"DB_POOL=11 CONSOLE_USER_EMAIL=kevinsweet@wundercapital.com rails c -- --nomultiline\" --size=Performance-L -a wunder-portal-production"
-alias prodpsql="heroku pg:psql -a wunder-portal-production"
-alias preboot_on="heroku features:enable preboot -a wunder-portal-production"
-alias preboot_off="heroku features:disable preboot -a wunder-portal-production"
-alias preboot_check="heroku features -a wunder-portal-production"
-alias stagingconsole="heroku run rails c -a wunder-portal-staging"
-alias lint="~/scripts/rbdiff;~/scripts/sldiff;~/scripts/scssdiff;"
-alias scrub="rake db:scrub:load_prod_data"
-alias mydbcleanup='psql --list | grep -v "wunder_portal" | grep -E "branch_ks_" | cut -d " " -f 2 | xargs -t -n 1 dropdb'
-alias dbcleanup='psql --list | grep -v "wunder_portal" | grep -E "branch_(ai|aq|bb|bj|ep|head)_" | cut -d " " -f 2 | xargs -p -t -n 1 dropdb'
 
 # Misc
 alias checkports="lsof -wni tcp:3000"
@@ -182,7 +149,15 @@ gc() {
              -m "$(gum write --width 80 --placeholder 'Details of changes')"
 }
 
-gfpo() { git push origin "$1" --force; }
+gfpo() {
+  local branch=$(git branch --show-current)
+  if [[ "$branch" == "main" || "$branch" == "master" ]]; then
+    echo "Refusing to force push to $branch."
+    return 1
+  fi
+  gum confirm "$(printf "You're currently on \033[38;5;212m%s\033[38;2;117;113;249m, are you sure you want to force push?" "$branch")" || return 0
+  git push origin "$branch" --force
+}
 gd() { git branch -d "$1"; }
 gD() { git branch -D "$1"; }
 
@@ -239,6 +214,8 @@ apply_diff() {
   git apply "$filename"
   rm -f "$filename"
 }
+
+[[ -r ~/.config/zsh/work.zsh ]] && source ~/.config/zsh/work.zsh
 
 if [[ -f "$HOME/.zshrc.local" ]]; then
   source "$HOME/.zshrc.local"

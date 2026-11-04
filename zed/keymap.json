@@ -6,8 +6,8 @@
       "cmd-shift-g": "git_panel::ToggleFocus",
       "ctrl-alt-cmd-space": "project_panel::CollapseAllEntries",
       "alt-w": "workspace::ClearAllNotifications",
-      "shift-escape": null // Unbind default binding
-    }
+      "shift-escape": null, // Unbind default binding
+    },
   },
   {
     "context": "Editor",
@@ -18,19 +18,35 @@
       "cmd-alt-shift-c": ["workspace::SendKeystrokes", "cmd-shift-p editor: copy file location enter"],
       "cmd-y": "editor::DuplicateLineDown",
       "alt-{": "pane::SwapItemLeft",
-      "alt-}": "pane::SwapItemRight"
-    }
+      "alt-}": "pane::SwapItemRight",
+    },
   },
   {
     "context": "Pane",
     "bindings": {
-      "cmd-shift-c": "project_panel::CollapseAllEntries"
-    }
+      "cmd-shift-c": "project_panel::CollapseAllEntries",
+      "cmd-shift-f": "workspace::NewSearch",
+    },
   },
   {
     "context": "Editor && edit_prediction",
     "bindings": {
-      "tab": null // Unbind default binding
-    }
-  }
+      "tab": null, // Unbind default binding
+    },
+  },
+  {
+    "context": "VimControl && !menu",
+    "bindings": {
+      "s": "vim::HelixJumpToWord",
+    },
+  },
+  // Keymap for sneak. It feels not that useful. Think I'd prefer to wait for a better jump feature.
+  // This also takes over the `s` key, which I use sometimes.
+  // {
+  //   "context": "vim_mode == normal || vim_mode == visual",
+  //   "bindings": {
+  //     "s": "vim::PushSneak",
+  //     "shift-s": "vim::PushSneakBackward",
+  //   },
+  // },
 ]
