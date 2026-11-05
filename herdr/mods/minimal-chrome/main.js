@@ -45,7 +45,7 @@ export default class WorkspaceChrome extends View {
     return h_flex().size_full().bg(t.chrome).pl(collapsed ? 6 : 14).pr(10).gap(4).items_center().text_size(13.5)
       .when(window()?.platform === "macos" && !window()?.fullscreen && !collapsed, el => el.pl(76))
       .when(!collapsed, el => el.child(div().flex_1()))
-      .when(!collapsed, el => el.child(this.button("search", svg("mods/minimal-chrome/search.svg").size(15), () => run("mod.open", { name: "picker" }))))
+      .when(!collapsed, el => el.child(this.button("ws-new", svg("mods/workspace-chrome/plus.svg").size(15), () => run("mod.open", { name: "new-workspace" }))))
       // On the macOS rail the traffic lights fill the row; the agents list's » unfolds it.
       .when(!(collapsed && window()?.platform === "macos"), el => el.child(this.button("sidebar-toggle", svg("mods/minimal-chrome/sidebar.svg").size(15), toggleSidebar)));
   }

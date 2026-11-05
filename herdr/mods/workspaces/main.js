@@ -1,10 +1,11 @@
-// Workspaces: one card per space, with that space's agents and their status inside it.
-// Click a card to switch to the space, click an agent line to jump to that agent,
+// Workspaces: one card per space, with that space's agents and their status inside it,
+// grouped under the project (git repo, else folder) each space is in. Click a card to switch to the space, click an agent line to jump to that agent,
 // right-click a card for the space menu.
 
 import { View, div, image, svg } from "gpui-kit";
 import { v_flex, h_flex } from "gpui-base";
-import { spaces, agents, run, theme, shared, setShared, setAgentOrder, openOverlay, layout, window } from "herdr";
+import { agentTitle } from "./label.js";
+import { spaces, agents, panes, exec, home, run, theme, shared, setShared, setAgentOrder, openOverlay, layout, window } from "herdr";
 
 function find(node, id) {
   if (node?.id === id) return node;
@@ -34,9 +35,48 @@ function icon(p, size, color) {
   return p.tint ? svg(p.icon).size(size).flex_none().text_color(color) : image(p.icon).w(size).h(size).flex_none();
 }
 
-const clean = (s) => (s ?? "").replace(/^[^\p{L}\p{N}]+/u, "").trim();
+// Where a space is now: its first terminal's live folder, else where it was made.
+function place(s, ps) {
+  const tabs = new Set((s.tabs ?? []).map((c) => c.id));
+  return ps.find((p) => tabs.has(p.tab) && p.cwd)?.cwd || s.folder || home();
+}
+const base = (path) => path.replace(/\/+$/, "").split("/").pop();
 
 export default class Workspaces extends View {
+  init(_props, cx) {
+    this.project = {}; // [machine, folder] -> { key, name } of its repo (or the folder itself)
+    this.asking = new Set();
+    cx.timer.every(500, (cx) => this.lookUp(cx));
+    this.lookUp(cx);
+  }
+
+  // Ask git which repo each space's folder belongs to (worktrees name their main repo).
+  lookUp(cx) {
+    const ps = panes();
+    for (const s of spaces()) {
+      const cwd = place(s, ps);
+      const key = JSON.stringify([s.machine ?? null, cwd]);
+      if (this.project[key] || this.asking.has(key)) continue;
+      this.asking.add(key);
+      cx.spawn(async (cx) => {
+        let found = { key, name: cwd === home() ? "~" : base(cwd) };
+        try {
+          const r = await exec("git", ["rev-parse", "--path-format=absolute", "--git-common-dir"], { cwd, on: s.machine ?? undefined });
+          const repo = r.code === 0 ? r.stdout.trim() : "";
+          if (repo) found = { key: JSON.stringify([s.machine ?? null, repo]), name: repo.endsWith("/.git") ? base(repo.slice(0, -5)) : base(repo).replace(/\.git$/, "") };
+        } catch {}
+        this.project[key] = found;
+        this.asking.delete(key);
+        cx.notify();
+      });
+    }
+  }
+
+  projectOf(s, ps) {
+    const cwd = place(s, ps);
+    return this.project[JSON.stringify([s.machine ?? null, cwd])] ?? { key: "…", name: "" };
+  }
+
   status(t, s, compact = false) {
     if (s === "working") return svg("mods/workspace-chrome/spinner.svg").size(12).mx(1).flex_none().text_color(t.working).spin(900);
     if (s === "blocked" && compact) return div().size(14).flex_none().rounded(4).bg(t.blocked + "26").text_size(10.5).font_bold().text_color(t.blocked).flex().items_center().justify_center().child("!");
@@ -62,11 +102,10 @@ export default class Workspaces extends View {
     return kept;
   }
 
+  // One line per agent: same rule as tabLabel (label.js), per agent.
   agentLabel(a, tab) {
     if (tab?.named) return tab.name;
-    const live = clean(a.title);
-    const telling = live && live !== a.program?.name && !/^[~/]|^[A-Za-z]:\\/.test(live) && !live.includes("@");
-    return telling ? live : a.program?.name || a.address;
+    return agentTitle(a) ?? (a.program?.name || a.address);
   }
 
   agentLine(t, a, tab) {
@@ -142,9 +181,18 @@ export default class Workspaces extends View {
   render() {
     const t = theme();
     const collapsed = narrow();
-    const sp = spaces();
+    const ps = panes();
     const all = agents();
-    const kept = this.colors(sp);
+    const kept = this.colors(spaces());
+    // Spaces grouped by project, projects in order of their first space.
+    const groups = [];
+    for (const s of spaces()) {
+      const p = this.projectOf(s, ps);
+      let g = groups.find((x) => x.key === p.key);
+      if (!g) groups.push((g = { key: p.key, name: p.name, spaces: [] }));
+      g.spaces.push(s);
+    }
+    const sp = groups.flatMap((g) => g.spaces);
     // Agent navigation follows the sidebar: space by space, top to bottom.
     const bySpace = new Map(sp.map((s) => [s.id, all.filter((a) => a.space === s.id)]));
     setAgentOrder(sp.flatMap((s) => bySpace.get(s.id).map((a) => a.address)));
@@ -152,16 +200,16 @@ export default class Workspaces extends View {
       const c = kept[s.id] ?? "ansi6";
       return c.startsWith("#") ? c : (MARK[c] ?? t[c]);
     };
-    const items = sp.map((s) => (collapsed ? this.rail : this.card).call(this, t, s, bySpace.get(s.id), fillOf(s)));
+    const item = (s) => (collapsed ? this.rail : this.card).call(this, t, s, bySpace.get(s.id), fillOf(s));
+    const items = groups.flatMap((g, i) => [
+      collapsed
+        ? (i > 0 ? div().flex_none().h(1).mx(8).my(2).bg(t.border) : null)
+        : div().flex_none().px(4).pt(i > 0 ? 8 : 2).text_size(11).font_medium().text_color(t.dim).truncate().child(g.name),
+      ...g.spaces.map(item),
+    ].filter(Boolean));
 
     return v_flex().size_full().min_h(0).bg(t.chrome).text_size(13)
-      .child(h_flex().h(31).flex_none().pl(16).pr(10).items_center().justify_between().text_size(11.5).text_color(t.dim)
-        .when(!collapsed, (el) => el.child("Workspaces"))
-        .child(div().id("ws-new").size(26).flex_none().flex().items_center().justify_center().rounded(6)
-          .hover((s) => s.bg(t.hover).text_color(t.foreground))
-          .on_click(() => run("space.new"))
-          .child(svg("mods/workspace-chrome/plus.svg").size(14))))
-      .child(v_flex().id("ws-list").flex_1().min_h(0).px(collapsed ? 4 : 8).pb(12).gap(6)
+      .child(v_flex().id("ws-list").flex_1().min_h(0).px(collapsed ? 4 : 8).pt(4).pb(12).gap(6)
         .overflow_y_scrollbar().children(items))
       .when(collapsed, (el) => el.child(h_flex().h(28).flex_none().items_center().justify_center()
         .child(div().id("ws-expand").text_size(13).text_color(t.dim).hover((s) => s.text_color(t.foreground))
