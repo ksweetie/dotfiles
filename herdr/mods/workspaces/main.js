@@ -1,11 +1,15 @@
 // Workspaces: one card per space, with that space's agents and their status inside it,
 // grouped under the project (git repo, else folder) each space is in. Click a card to switch to the space, click an agent line to jump to that agent,
-// right-click a card for the space menu.
+// right-click a card for the space menu. Each card shows its branch's GitHub PR
+// (state, checks, unresolved comments, conflicts); a merged PR archives the
+// workspace: it closes, its folder and branch stay, and the archived list
+// (mods/archived) reopens it.
 
 import { View, div, image, svg } from "gpui-kit";
 import { v_flex, h_flex } from "gpui-base";
 import { agentTitle } from "./label.js";
-import { spaces, agents, panes, exec, home, run, theme, shared, setShared, setAgentOrder, openOverlay, layout, window } from "herdr";
+import { pullRequest } from "./github.js";
+import { spaces, agents, panes, exec, home, run, theme, shared, setShared, setAgentOrder, openOverlay, layout, window, notify } from "herdr";
 
 function find(node, id) {
   if (node?.id === id) return node;
@@ -41,12 +45,25 @@ function place(s, ps) {
   return ps.find((p) => tabs.has(p.tab) && p.cwd)?.cwd || s.folder || home();
 }
 const base = (path) => path.replace(/\/+$/, "").split("/").pop();
+const TRUNK = new Set(["main", "master", "develop", "trunk"]);
+const PR_EVERY = 60000; // how often each branch's PR is asked for
+
+// Archived workspaces, newest first: { folder, name, named, branch, project, pr, at }.
+// Shared with mods/archived, saved in shared.json.
+const ARCHIVED = "workspaces.archived";
+// PR urls whose workspace was reopened after merging: never archived by itself again.
+const KEEP = "workspaces.keep";
 
 export default class Workspaces extends View {
   init(_props, cx) {
     this.project = {}; // [machine, folder] -> { key, name } of its repo (or the folder itself)
     this.asking = new Set();
+    this.pr = {}; // "top|branch" -> its PR, null: none
+    this.prAt = {}; // "top|branch" -> when last asked
+    this.prAsking = new Set();
+    this.hovered = null; // space id under the pointer, for its archive button
     cx.timer.every(500, (cx) => this.lookUp(cx));
+    cx.timer.every(5000, (cx) => this.pollPRs(cx));
     this.lookUp(cx);
   }
 
@@ -59,11 +76,12 @@ export default class Workspaces extends View {
       if (this.project[key] || this.asking.has(key)) continue;
       this.asking.add(key);
       cx.spawn(async (cx) => {
-        let found = { key, name: cwd === home() ? "~" : base(cwd) };
+        let found = { key, name: cwd === home() ? "~" : base(cwd), top: null };
         try {
-          const r = await exec("git", ["rev-parse", "--path-format=absolute", "--git-common-dir"], { cwd, on: s.machine ?? undefined });
-          const repo = r.code === 0 ? r.stdout.trim() : "";
-          if (repo) found = { key: JSON.stringify([s.machine ?? null, repo]), name: repo.endsWith("/.git") ? base(repo.slice(0, -5)) : base(repo).replace(/\.git$/, "") };
+          const on = s.machine ?? undefined;
+          const r = await exec("git", ["rev-parse", "--path-format=absolute", "--git-common-dir", "--show-toplevel"], { cwd, on });
+          const [repo, top] = r.code === 0 ? r.stdout.trim().split("\n") : [];
+          if (repo) found = { key: JSON.stringify([s.machine ?? null, repo]), name: repo.endsWith("/.git") ? base(repo.slice(0, -5)) : base(repo).replace(/\.git$/, ""), top };
         } catch {}
         this.project[key] = found;
         this.asking.delete(key);
@@ -75,6 +93,74 @@ export default class Workspaces extends View {
   projectOf(s, ps) {
     const cwd = place(s, ps);
     return this.project[JSON.stringify([s.machine ?? null, cwd])] ?? { key: "…", name: "" };
+  }
+
+  // The PR of a space's branch (local spaces off the trunk only): [key, pr].
+  prKey(s, ps) {
+    if (s.machine || !s.branch || TRUNK.has(s.branch)) return null;
+    const top = this.projectOf(s, ps).top;
+    return top ? `${top}|${s.branch}` : null;
+  }
+
+  pollPRs(cx) {
+    const ps = panes();
+    const now = Date.now();
+    for (const s of spaces()) {
+      const key = this.prKey(s, ps);
+      if (!key || this.prAsking.has(key) || now - (this.prAt[key] ?? 0) < PR_EVERY) continue;
+      this.prAsking.add(key);
+      const [top, branch] = [key.slice(0, key.indexOf("|")), s.branch];
+      cx.spawn(async (cx) => {
+        try { this.pr[key] = await pullRequest(top, branch); } catch {} // offline: keep the last answer
+        this.prAt[key] = Date.now();
+        this.prAsking.delete(key);
+        this.autoArchive(s.id);
+        cx.notify();
+      });
+    }
+  }
+
+  // A merged PR archives its workspace, unless an agent there is busy or waiting on you
+  // (it's tried again on the next look) or you reopened it after the merge.
+  autoArchive(id) {
+    const s = spaces().find((x) => x.id === id);
+    const pr = s && this.pr[this.prKey(s, panes())];
+    if (pr?.state !== "MERGED" || (shared(KEEP) ?? []).includes(pr.url)) return;
+    if (agents().some((a) => a.space === id && (a.status === "working" || a.status === "blocked"))) return;
+    this.archive(s, `PR #${pr.number} merged`);
+  }
+
+  archive(s, why) {
+    const ps = panes();
+    const proj = this.projectOf(s, ps);
+    const pr = this.pr[this.prKey(s, ps)] ?? null;
+    const folder = proj.top ?? place(s, ps);
+    const record = { folder, name: s.name, named: s.named, branch: s.branch ?? null, project: proj.name || base(folder),
+      pr: pr && { number: pr.number, title: pr.title, url: pr.url, state: pr.state }, at: Date.now() };
+    setShared(ARCHIVED, [record, ...(shared(ARCHIVED) ?? []).filter((r) => r.folder !== folder)]);
+    run("space.close", { id: s.id, confirmed: true });
+    notify({ title: `Archived ${s.name}`, body: why ? `${why}. Its folder and branch are kept.` : "Its folder and branch are kept.",
+      action: { name: "mod.open", args: { name: "archived" } } });
+  }
+
+  prLine(t, pr) {
+    const bits = [];
+    const state = pr.state === "MERGED" ? ["Merged", t.ansi5] : pr.state === "CLOSED" ? ["Closed", t.dim]
+      : pr.draft ? ["Draft", t.dim] : pr.review === "APPROVED" ? ["Approved", t.ansi2]
+      : pr.review === "CHANGES_REQUESTED" ? ["Changes requested", t.blocked] : ["Open", t.muted];
+    bits.push(div().flex_none().text_color(state[1]).child(state[0]));
+    if (pr.state === "OPEN") {
+      const c = pr.checks;
+      if (c === "SUCCESS") bits.push(div().flex_none().text_color(t.ansi2).child("✓ checks"));
+      else if (c === "FAILURE" || c === "ERROR") bits.push(div().flex_none().text_color(t.ansi1).child("✗ checks"));
+      else if (c === "PENDING" || c === "EXPECTED") bits.push(div().flex_none().text_color(t.working).child("● checks"));
+      if (pr.unresolved) bits.push(div().flex_none().text_color(t.foreground).child(`${pr.unresolved} unresolved`));
+      if (pr.conflicts) bits.push(div().flex_none().text_color(t.blocked).child("conflicts"));
+    }
+    return h_flex().gap(6).items_center().text_size(11).min_w(0).overflow_hidden()
+      .child(div().id(`ws-pr-${pr.number}`).flex_none().text_color(t.dim).hover((st) => st.text_color(t.accent)).cursor_pointer()
+        .on_click((_e, cx) => { cx.stop_propagation(); exec("open", [pr.url]); }).child(`#${pr.number}`))
+      .children(bits);
   }
 
   status(t, s, compact = false) {
@@ -131,7 +217,7 @@ export default class Workspaces extends View {
       .child(this.status(t, a.status, true));
   }
 
-  card(t, s, mine, fill) {
+  card(t, s, mine, fill, pr) {
     const tabs = new Map(s.tabs.map((tab) => [tab.id, tab]));
     const branch = s.branch && s.branch !== "main" && s.branch !== "master" && s.branch !== s.name ? s.branch : null;
     return v_flex()
@@ -145,6 +231,7 @@ export default class Workspaces extends View {
       .bg(s.active ? t.selected : t.surface)
       .when(!s.active, (el) => el.hover((st) => st.bg(t.hover)))
       .cursor_pointer()
+      .on_hover((over, cx) => { this.hovered = over ? s.id : this.hovered === s.id ? null : this.hovered; cx.notify(); })
       .on_click(() => run("space.select", { id: s.id }))
       .on_mouse_down("right", () =>
         openOverlay({ mod: "menu", kind: "popup", width: 200, height: 260, props: { tab: "space", target: { id: s.id } } }))
@@ -155,8 +242,13 @@ export default class Workspaces extends View {
           .child(v_flex().flex_1().min_w(0)
             .child(div().truncate().font_medium().text_color(t.foreground).child(s.name))
             .when(Boolean(branch), (el) => el.child(div().truncate().text_size(11).text_color(t.dim).child(branch))))
-          .when(mine.length === 0, (el) => el.child(div().text_size(11).text_color(t.dim).child(`${s.tabs.length} tab${s.tabs.length === 1 ? "" : "s"}`))),
+          .when(mine.length === 0 && this.hovered !== s.id, (el) => el.child(div().text_size(11).text_color(t.dim).child(`${s.tabs.length} tab${s.tabs.length === 1 ? "" : "s"}`)))
+          .when(this.hovered === s.id, (el) => el.child(div().id(`ws-archive-${s.id}`).size(20).flex_none().flex().items_center().justify_center()
+            .rounded(5).text_color(t.dim).hover((st) => st.bg(t.hover).text_color(t.foreground)).tooltip("Archive")
+            .on_click((_e, cx) => { cx.stop_propagation(); this.archive(s, ""); })
+            .child(svg("mods/workspaces/archive.svg").size(13)))),
       )
+      .when(Boolean(pr), (el) => el.child(div().pl(29).child(this.prLine(t, pr))))
       .when(mine.length > 0, (el) =>
         el.child(v_flex().pl(20).gap(1).children(mine.map((a) => this.agentLine(t, a, tabs.get(a.tab))))));
   }
@@ -200,7 +292,8 @@ export default class Workspaces extends View {
       const c = kept[s.id] ?? "ansi6";
       return c.startsWith("#") ? c : (MARK[c] ?? t[c]);
     };
-    const item = (s) => (collapsed ? this.rail : this.card).call(this, t, s, bySpace.get(s.id), fillOf(s));
+    const item = (s) => collapsed ? this.rail(t, s, bySpace.get(s.id), fillOf(s))
+      : this.card(t, s, bySpace.get(s.id), fillOf(s), this.pr[this.prKey(s, ps)]);
     const items = groups.flatMap((g, i) => [
       collapsed
         ? (i > 0 ? div().flex_none().h(1).mx(8).my(2).bg(t.border) : null)
@@ -211,6 +304,10 @@ export default class Workspaces extends View {
     return v_flex().size_full().min_h(0).bg(t.chrome).text_size(13)
       .child(v_flex().id("ws-list").flex_1().min_h(0).px(collapsed ? 4 : 8).pt(4).pb(12).gap(6)
         .overflow_y_scrollbar().children(items))
+      .when(!collapsed, (el) => el.child(h_flex().id("ws-archived").h(30).flex_none().mx(8).mb(8).px(8).gap(8).items_center().rounded(7)
+        .text_size(12).text_color(t.dim).hover((st) => st.bg(t.hover).text_color(t.foreground)).cursor_pointer()
+        .on_click(() => run("mod.open", { name: "archived" }))
+        .child(svg("mods/workspaces/archive.svg").size(13)).child("Archived")))
       .when(collapsed, (el) => el.child(h_flex().h(28).flex_none().items_center().justify_center()
         .child(div().id("ws-expand").text_size(13).text_color(t.dim).hover((s) => s.text_color(t.foreground))
           .on_click(toggleSidebar).child("»"))));
