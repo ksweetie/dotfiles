@@ -35,6 +35,12 @@
     },
   },
   {
+    "context": "Workspace",
+    "bindings": {
+      "cmd-w": null,
+    },
+  },
+  {
     "context": "VimControl && !menu",
     "bindings": {
       "s": "vim::HelixJumpToWord",

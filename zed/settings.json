@@ -8,6 +8,10 @@
   "cli_default_open_behavior": "existing_window",
   "cursor_animation": { "enabled": true },
   "diff_view_style": "unified",
+  "edit_predictions": {
+    "disabled_globs": ["/Users/kevinsweet/.rbenv/**"],
+    "provider": "zed",
+  },
   "colorize_brackets": true,
   "sticky_scroll": {
     "enabled": true,
@@ -89,6 +93,7 @@
       },
     },
     "default_profile": "write",
+    "always_allow_tool_actions": true,
     "button": false,
     "default_model": {
       "effort": "high",
@@ -105,6 +110,11 @@
     "button": false,
   },
   "context_servers": {
+    "chrome-devtools-mcp-zed": {
+      "settings": {
+        "browser_url": "http://astra.wunderdev.com:3000/",
+      },
+    },
   },
   "current_line_highlight": "none",
   "cursor_blink": false,
@@ -114,7 +124,7 @@
   "diagnostics": {
     "include_warnings": false,
   },
-  "file_scan_exclusions": [".yarn/releases/*.cjs", "**/*.gd.uid"],
+  "file_scan_exclusions": [".yarn/releases/*.cjs", "**/*.gd.uid", "/Users/kevinsweet/.rbenv/**", "**/node_modules/**"],
   "file_scan_inclusions": [".env"],
   "format_on_save": "on",
   "git": {
@@ -185,6 +195,9 @@
         },
       },
     },
+  },
+  "notification_panel": {
+    "button": false,
   },
   "outline_panel": {
     "dock": "left",
