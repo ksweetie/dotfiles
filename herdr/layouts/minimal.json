@@ -84,7 +84,33 @@
                   "lone": true
                 }
               }
-            },
+            }
+          ],
+          "padding": 8,
+          "gap": 8
+        }
+      ],
+      "resizable": false
+    },
+    {
+      "id": "right",
+      "type": "column",
+      "children": [
+        {
+          "id": "right-bar",
+          "type": "block",
+          "content": {
+            "mod": "right-chrome"
+          },
+          "size": {
+            "px": 42
+          },
+          "window_drag": true
+        },
+        {
+          "id": "right-body",
+          "type": "column",
+          "children": [
             {
               "id": "panel",
               "type": "column",
@@ -108,22 +134,65 @@
                       }
                     }
                   ],
-                  "active": "files"
+                  "active": "changes"
                 }
               ],
               "size": {
-                "px": 368
+                "weight": 1.5329357385635376
+              }
+            },
+            {
+              "id": "actions-area",
+              "type": "column",
+              "children": [
+                {
+                  "id": "actions",
+                  "type": "block",
+                  "content": {
+                    "mod": "actions"
+                  },
+                  "size": {
+                    "px": 40
+                  }
+                },
+                {
+                  "id": "actions-term",
+                  "type": "block",
+                  "content": {
+                    "mod": "actions",
+                    "props": {
+                      "placeholder": true,
+                      "message": "Not in a git repository.",
+                      "id": null,
+                      "name": null,
+                      "repo": null,
+                      "none": false
+                    }
+                  }
+                }
+              ],
+              "size": {
+                "weight": 0.4670642912387848
               },
-              "min": 280,
-              "max": 900,
-              "hidden": true
+              "min": 42,
+              "background": "background",
+              "border": {
+                "width": 1,
+                "color": "border"
+              },
+              "radius": 10
             }
           ],
           "padding": 8,
           "gap": 8
         }
       ],
-      "resizable": false
+      "size": {
+        "px": 420
+      },
+      "min": 280,
+      "max": 900,
+      "background": "chrome"
     }
   ],
   "background": "canvas",
